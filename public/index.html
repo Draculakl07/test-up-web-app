@@ -5,12 +5,20 @@
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-  <div id="message-container"></div>
-  <textarea id="message-input" placeholder="Type your message..." rows="5"></textarea>
 
-  <button id="send-button">Send</button>
+<div id="room-container">
+    <h2>Available Rooms</h2>
+    <ul id="room-list"></ul>
+    <button id="create-room-button">Create Room</button>
+</div>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="script.js"></script>
+<div id="chat-container">
+    <div id="message-container"></div>
+    <textarea id="message-input" placeholder="Type your message..." rows="5"></textarea>
+    <button id="send-button">Send</button>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

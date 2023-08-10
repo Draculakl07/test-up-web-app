@@ -1,11 +1,11 @@
 function setUserName() {
   let username = localStorage.getItem('username');
   if (!username) {
-    username = prompt('Please enter your username:');
-    if (!username || username.trim() === '') {
-      return setUserName();
-    }
-    localStorage.setItem('username', username);
+      username = prompt('Please enter your username:');
+      if (!username || username.trim() === '') {
+          return setUserName();
+      }
+      localStorage.setItem('username', username);
   }
   return username;
 }
@@ -16,67 +16,50 @@ const socketUrl = window.location.host.startsWith('localhost')
 
 const socket = io(socketUrl);
 const username = setUserName();
-socket.emit('newUser', username);
+let currentRoom = null;
 
-function displayMessage(messageData) {
-  if (!messageData.username || !messageData.message || !messageData.timestamp) {
-    return; // If any attribute is missing, don't display the message.
-  }
-  
+document.getElementById('create-room-button').addEventListener('click', () => {
+  const roomName = prompt("Enter room name:");
+  if (roomName) socket.emit('createRoom', roomName);
+});
+
+socket.on('roomList', (rooms) => {
+  const roomList = document.getElementById('room-list');
+  roomList.innerHTML = '';
+  rooms.forEach(room => {
+      const li = document.createElement('li');
+      li.innerText = room;
+      li.addEventListener('click', () => {
+          currentRoom = room;
+          socket.emit('joinRoom', room);
+      });
+      roomList.appendChild(li);
+  });
+});
+
+socket.on('joinedRoom', (roomName) => {
+  const roomContainer = document.getElementById('room-container');
+  const chatContainer = document.getElementById('chat-container');
+  roomContainer.style.display = 'none';
+  chatContainer.style.display = 'flex';
+
+  document.getElementById('send-button').addEventListener('click', () => {
+      const message = document.getElementById('message-input').value;
+      if (message.trim()) {
+          socket.emit('sendMessageToRoom', { roomName: currentRoom, username, message });
+          displayMessage({ username, message, timestamp: new Date().toLocaleTimeString() });  // Display the message for the sender
+          document.getElementById('message-input').value = '';
+      }
+  });
+
+  socket.on('newMessage', (message) => {
+      displayMessage(message);
+  });
+});
+
+function displayMessage(message) {
   const messageContainer = document.getElementById('message-container');
-  const newMessageElement = document.createElement('pre');
-  const messageText = document.createElement('span');
-  const messageTime = document.createElement('span');
-  
-  messageText.innerText = `${messageData.username}: ${messageData.message}`;
-  messageTime.innerText = messageData.timestamp;
-  messageTime.className = "message-time";
-
-  newMessageElement.appendChild(messageText);
-  newMessageElement.appendChild(messageTime);
-  messageContainer.appendChild(newMessageElement);
+  const messageElement = document.createElement('pre');
+  messageElement.textContent = `${message.username} (${message.timestamp}): ${message.message}`;
+  messageContainer.appendChild(messageElement);
 }
-
-
-
-document.getElementById('send-button').addEventListener('click', () => {
-  const messageInput = document.getElementById('message-input');
-  const message = messageInput.value.trim();
-  if (message) {
-    socket.emit('sendMessage', { username, message });
-    messageInput.value = '';
-  }
-});
-
-document.getElementById('message-input').addEventListener('keyup', (event) => {
-  if (event.key === 'Enter') {
-    document.getElementById('send-button').click();
-  }
-});
-
-socket.on('newMessage', (message) => {
-  displayMessage(`${message.username}: ${message.message}`);
-});
-
-socket.on('messages', (messages) => {
-  messages.forEach((message) => {
-    displayMessage(`${message.username}: ${message.message}`);
-  });
-});
-
-socket.on('userConnected', (username) => {
-  displayMessage(`${username} has joined the chat.`);
-});
-
-socket.on('userDisconnected', (username) => {
-  displayMessage(`${username} has left the chat.`);
-});
-socket.on('newMessage', (messageData) => {
-  displayMessage(messageData);
-});
-
-socket.on('messages', (messages) => {
-  messages.forEach((messageData) => {
-    displayMessage(messageData);
-  });
-});

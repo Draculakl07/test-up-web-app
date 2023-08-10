@@ -1,9 +1,30 @@
 body {
   font-family: Arial, sans-serif;
-  display: flex;           /* Make the body a flex container */
-  flex-direction: column;  /* Children (message-container, textarea, button) are stacked vertically */
-  height: 100vh;           /* Take full viewport height */
-  margin: 0;               /* Reset default margin */
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
+}
+
+#room-container {
+  padding: 10px;
+}
+
+#room-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+#room-list li {
+  margin: 5px 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+#chat-container {
+  display: none;
+  flex-direction: column;
+  flex: 1;
 }
 
 #message-container {

@@ -6,43 +6,47 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
-let messages = [];
+let rooms = {};
 let users = {};
 
 app.use(express.static('public'));
 
 io.on('connection', (socket) => {
-  console.log('User connected:', socket.id);
+    socket.on('createRoom', (roomName) => {
+        if (!rooms[roomName]) {
+            rooms[roomName] = [];
+        }
+        rooms[roomName].push(socket.id);
+        socket.join(roomName);
+        io.emit('roomList', Object.keys(rooms));
+    });
 
-  socket.on('sendMessage', (data) => {
-    const { username, message } = data;
-    if (!username || !message) {
-        return;  // If there's no username or message, don't process.
-    }
-    const timestamp = new Date().toLocaleTimeString();  
-    const userMessage = { username, message, timestamp };  
-    messages.push(userMessage);
-    io.emit('newMessage', userMessage);
-});
+    socket.on('joinRoom', (roomName) => {
+        if (rooms[roomName]) {
+            rooms[roomName].push(socket.id);
+            socket.join(roomName);
+            socket.emit('joinedRoom', roomName);
+        }
+    });
 
-
-
-  socket.on('newUser', (username) => {
-    users[socket.id] = username;
-    socket.broadcast.emit('userConnected', username);
+    socket.on('sendMessageToRoom', (data) => {
+      const { roomName, username, message } = data;
+      const timestamp = new Date().toLocaleTimeString();
+      const userMessage = { username, message, timestamp };
+      io.in(roomName).emit('newMessage', userMessage);  // Sending message to all users in the room, including sender
   });
+  
 
-  socket.on('disconnect', () => {
-    const username = users[socket.id];
-    console.log('User disconnected:', username);
-    if (username) {
-      delete users[socket.id];
-      socket.broadcast.emit('userDisconnected', username);
-    }
-  });
+    socket.on('disconnect', () => {
+        for (let room in rooms) {
+            rooms[room] = rooms[room].filter(id => id !== socket.id);
+            if (rooms[room].length === 0) delete rooms[room];
+        }
+        io.emit('roomList', Object.keys(rooms));
+    });
 });
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+    console.log(`Server running on port ${port}`);
 });
