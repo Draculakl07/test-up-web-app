@@ -1,9 +1,13 @@
 body {
   font-family: Arial, sans-serif;
+  display: flex;           /* Make the body a flex container */
+  flex-direction: column;  /* Children (message-container, textarea, button) are stacked vertically */
+  height: 100vh;           /* Take full viewport height */
+  margin: 0;               /* Reset default margin */
 }
 
 #message-container {
-  height: 300px;
+  flex: 1;                 /* This will make it grow to take up all available space */
   overflow-y: scroll;
   border: 1px solid #ccc;
   padding: 10px;
@@ -13,21 +17,36 @@ body {
   width: 80%;
   padding: 5px;
   font-size: 16px;
+  margin-bottom: 10px;    /* Some spacing at the bottom */
 }
 
 #send-button {
-  margin-left: 10px;
+  
+  margin-left: 0px;
   padding: 5px 10px;
   font-size: 16px;
+  color: rgb(12, 0, 0);
+  background-color: #ca4611;
+  
 }
 
 pre {
   font-family: Arial, sans-serif;
-  white-space: pre-wrap; /* Wraps the text */
-  word-wrap: break-word; /* Breaks long words */
-  background-color: #f8f8f8;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background-color: #6ec41e;
   padding: 5px;
   border-radius: 5px;
   margin: 5px 0;
-  overflow-x: auto; /* In case of long lines, a scrollbar will appear */
+  overflow-x: auto;
+}
+
+pre {
+  display: flex;
+  justify-content: space-between; /* This will separate the message and timestamp */
+}
+
+.message-time {
+  color: rgb(0, 0, 0);
+  margin-left: 10px;
 }

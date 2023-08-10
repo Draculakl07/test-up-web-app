@@ -18,15 +18,26 @@ const socket = io(socketUrl);
 const username = setUserName();
 socket.emit('newUser', username);
 
-function displayMessage(message) {
+function displayMessage(messageData) {
+  if (!messageData.username || !messageData.message || !messageData.timestamp) {
+    return; // If any attribute is missing, don't display the message.
+  }
+  
   const messageContainer = document.getElementById('message-container');
   const newMessageElement = document.createElement('pre');
+  const messageText = document.createElement('span');
+  const messageTime = document.createElement('span');
+  
+  messageText.innerText = `${messageData.username}: ${messageData.message}`;
+  messageTime.innerText = messageData.timestamp;
+  messageTime.className = "message-time";
 
-  // Use innerText instead of textContent
-  newMessageElement.innerText = message;
-
+  newMessageElement.appendChild(messageText);
+  newMessageElement.appendChild(messageTime);
   messageContainer.appendChild(newMessageElement);
 }
+
+
 
 document.getElementById('send-button').addEventListener('click', () => {
   const messageInput = document.getElementById('message-input');
@@ -59,4 +70,13 @@ socket.on('userConnected', (username) => {
 
 socket.on('userDisconnected', (username) => {
   displayMessage(`${username} has left the chat.`);
+});
+socket.on('newMessage', (messageData) => {
+  displayMessage(messageData);
+});
+
+socket.on('messages', (messages) => {
+  messages.forEach((messageData) => {
+    displayMessage(messageData);
+  });
 });

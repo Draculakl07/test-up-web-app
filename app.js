@@ -16,10 +16,16 @@ io.on('connection', (socket) => {
 
   socket.on('sendMessage', (data) => {
     const { username, message } = data;
-    const userMessage = { username, message };
+    if (!username || !message) {
+        return;  // If there's no username or message, don't process.
+    }
+    const timestamp = new Date().toLocaleTimeString();  
+    const userMessage = { username, message, timestamp };  
     messages.push(userMessage);
     io.emit('newMessage', userMessage);
-  });
+});
+
+
 
   socket.on('newUser', (username) => {
     users[socket.id] = username;
