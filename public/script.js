@@ -15,18 +15,18 @@ const socketUrl = window.location.host.startsWith('localhost')
   : `https://${window.location.host}`;
 
 const socket = io(socketUrl);
-
 const username = setUserName();
 socket.emit('newUser', username);
 
 function displayMessage(message) {
   const messageContainer = document.getElementById('message-container');
-  const newMessageElement = document.createElement('div');
-  // Replace newline characters with <br> tags to display multiline messages properly
-  newMessageElement.innerHTML = message.replace(/\n/g, '<br>');
+  const newMessageElement = document.createElement('pre');
+
+  // Use innerText instead of textContent
+  newMessageElement.innerText = message;
+
   messageContainer.appendChild(newMessageElement);
 }
-
 
 document.getElementById('send-button').addEventListener('click', () => {
   const messageInput = document.getElementById('message-input');

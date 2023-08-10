@@ -20,3 +20,14 @@ body {
   padding: 5px 10px;
   font-size: 16px;
 }
+
+pre {
+  font-family: Arial, sans-serif;
+  white-space: pre-wrap; /* Wraps the text */
+  word-wrap: break-word; /* Breaks long words */
+  background-color: #f8f8f8;
+  padding: 5px;
+  border-radius: 5px;
+  margin: 5px 0;
+  overflow-x: auto; /* In case of long lines, a scrollbar will appear */
+}
