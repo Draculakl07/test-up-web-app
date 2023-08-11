@@ -11,8 +11,9 @@ function setUserName() {
 }
 
 const socketUrl = window.location.host.startsWith('localhost')
-  ? 'https://node-demo1.azurewebsites.net'
-  : `https://${window.location.host}`;
+  ? 'http://localhost:3000' // or whatever port your local server runs on
+  : 'https://node-demo1.azurewebsites.net'; 
+
 
 const socket = io.connect(socketUrl);
 const username = setUserName();
