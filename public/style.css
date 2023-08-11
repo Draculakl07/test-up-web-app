@@ -71,3 +71,10 @@ pre {
   color: rgb(0, 0, 0);
   margin-left: 10px;
 }
+#leave-button, #back-button {
+  background-color: red !important; /* this will make them very visible */
+  display: block !important;
+  width: 100px;
+  height: 50px;
+}
+
