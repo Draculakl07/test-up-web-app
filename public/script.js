@@ -11,7 +11,7 @@ function setUserName() {
 }
 
 const socketUrl = window.location.host.startsWith('localhost')
-  ? 'http://localhost:3000'
+  ? 'https://node-demo1.azurewebsites.net'
   : `https://${window.location.host}`;
 
 const socket = io.connect(socketUrl);
