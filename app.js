@@ -7,11 +7,7 @@ const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 
-const mongoDB = process.env.MONGO_DB_CONNECTION_STRING;
-
-mongoose.connect(mongoDB).then(() => {
-    console.log('connected');
-}).catch(err => console.log(err));
+const mongoDB = "mongodb+srv://admin:admin@cluster2.wafohpu.mongodb.net/?retryWrites=true&w=majority";
 
 mongoose.connect(mongoDB).then(() => {
     console.log('connected');
