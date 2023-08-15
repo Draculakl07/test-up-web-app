@@ -1,80 +1,150 @@
+/* style.css */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f5f5;
   display: flex;
   flex-direction: column;
   height: 100vh;
   margin: 0;
+  overflow: hidden;
 }
 
-#room-container {
-  padding: 10px;
+#room-container, #chat-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  transition: all 0.3s ease-in-out;
 }
 
 #room-list {
   list-style-type: none;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 #room-list li {
-  margin: 5px 0;
   cursor: pointer;
-  text-decoration: underline;
+  padding: 8px 12px;
+  border-radius: 5px;
+  background: #01060c;
+  color: #ffffff;
+  transition: all 0.3s ease;
 }
 
-#chat-container {
-  display: none;
-  flex-direction: column;
-  flex: 1;
+#room-list li:hover {
+  background: #0056b3;
 }
 
 #message-container {
-  flex: 1;                 /* This will make it grow to take up all available space */
-  overflow-y: scroll;
+  flex: 1;
+  width: 60%;
+  max-height: 400px;
+  overflow-y: auto;
   border: 1px solid #ccc;
-  padding: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 15px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }
 
 #message-input {
-  width: 80%;
-  padding: 5px;
-  font-size: 16px;
-  margin-bottom: 10px;    /* Some spacing at the bottom */
+  width: 100%;
+  padding: 10px 15px;
+  margin-top: 15px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  transition: border 0.3s ease;
+}
+
+#message-input:focus {
+  border-color: #007BFF;
+  outline: none;
+}
+
+button {
+  padding: 10px 20px;
+  margin-top: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+  background: #daae86;
 }
 
 #send-button {
-  
-  margin-left: 0px;
-  padding: 5px 10px;
-  font-size: 16px;
-  color: rgb(12, 0, 0);
-  background-color: #ca4611;
-  
+  background-color: #007BFF;
+  color: #ffffff;
 }
 
-pre {
-  font-family: Arial, sans-serif;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  background-color: #6ec41e;
-  padding: 5px;
-  border-radius: 5px;
-  margin: 5px 0;
-  overflow-x: auto;
+#send-button:hover {
+  background-color: #0056b3;
+}
+
+#leave-button, #back-button {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+
+#leave-button:hover, #back-button:hover {
+  background-color: #c82333;
 }
 
 pre {
   display: flex;
-  justify-content: space-between; /* This will separate the message and timestamp */
+  justify-content: space-between;
+  padding: 8px 12px;
+  background-color: #e9ecef;
+  border-radius: 5px;
+  margin: 8px 0;
+  line-height: 1.4;
 }
 
 .message-time {
-  color: rgb(0, 0, 0);
-  margin-left: 10px;
-}
-#leave-button, #back-button {
-  background-color: red !important; /* this will make them very visible */
-  display: block !important;
-  width: 100px;
-  height: 50px;
+  font-size: 0.8em;
+  color: #6c757d;
+  margin-left: 8px;
 }
 
+/* ... [previous CSS rules unchanged] ... */
+
+/* Responsive Media Queries */
+
+/* For devices with max-width of 768px (Tablets and below) */
+@media only screen and (max-width: 768px) {
+  #message-container {
+    width: 90%;  /* Increase width for smaller screens */
+  }
+
+  #message-input {
+    width: 90%; /* Adjust input width to match container */
+  }
+
+  /* Adjusting button size for better touch targets */
+  button {
+    padding: 12px 24px; 
+  }
+}
+
+/* For devices with max-width of 480px (Mobile) */
+@media only screen and (max-width: 480px) {
+  body {
+    font-size: 0.9rem;  /* Slightly decrease font size for mobile */
+  }
+
+  /* Adjust room list for smaller touch targets and visibility */
+  #room-list li {
+    padding: 10px 15px; 
+    font-size: 1rem; /* Increase font size */
+  }
+
+  /* Adjust messages for better visibility */
+  pre {
+    padding: 10px 15px; 
+  }
+}
+
+/* ... [remaining CSS rules unchanged] ... */
