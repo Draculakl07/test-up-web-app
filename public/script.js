@@ -12,7 +12,7 @@ function setUserName() {
 
 const socketUrl = window.location.host.startsWith('localhost')
   ? 'http://localhost:3000' // or whatever port your local server runs on
-  : 'https://node-demo1.azurewebsites.net'; 
+  : 'https://chate.azurewebsites.net/'; 
 
 
 const socket = io.connect(socketUrl);
